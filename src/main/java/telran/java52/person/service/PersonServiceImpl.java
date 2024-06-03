@@ -5,8 +5,8 @@ import java.util.stream.Stream;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import telran.java52.person.dao.PersonRepository;
 import telran.java52.person.dto.AddressDto;
@@ -39,13 +39,13 @@ public class PersonServiceImpl implements PersonService {
 		Person person =personRepository.findById(id).orElseThrow(PersonNotFoundException::new);
 		return modelMapper.map(person, PersonDto.class);
 	}
-	@Transactional
+	@Transactional (readOnly =true)
 	@Override
 	public Iterable <PersonDto> findPersonByCity(String city) {
 		Stream <Person> persons =personRepository.findByAddress_City(city);
 		return persons.map(p->modelMapper.map(p,PersonDto.class)).toList();
 	}
-	@Transactional
+	@Transactional (readOnly =true)
 	@Override
 	public Iterable<PersonDto> findPersonByAges(Integer minAge, Integer maxAge) {
 	    LocalDate from = LocalDate.now().minusYears(maxAge);
@@ -54,7 +54,7 @@ public class PersonServiceImpl implements PersonService {
 		return persons.map(p->modelMapper.map(p,PersonDto.class)).toList();
 		
 	}
-	@Transactional
+    @Transactional
 	@Override
 	public PersonDto updateName(Integer id, String newName) {
 		Person person =personRepository.findById(id).orElseThrow(PersonNotFoundException::new);
@@ -62,7 +62,7 @@ public class PersonServiceImpl implements PersonService {
 		personRepository.save(person);
 		return modelMapper.map(person, PersonDto.class);
 	}
-	@Transactional
+	@Transactional (readOnly =true)
 	@Override
 	public Iterable<PersonDto> findPersonByName(String name) {
 		Stream <Person> persons =personRepository.findByName(name);
@@ -71,8 +71,8 @@ public class PersonServiceImpl implements PersonService {
 
 	@Override
 	public Iterable<CityPopulationDto> citiesPopulation() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return personRepository.getCitiesPopulation();
 	}
 	@Transactional
 	@Override
@@ -82,7 +82,7 @@ public class PersonServiceImpl implements PersonService {
 		personRepository.save(person);
 		return modelMapper.map(person, PersonDto.class);
 	}
-
+    @Transactional 
 	@Override
 	public PersonDto deletePerson(Integer id) {
 		Person person =personRepository.findById(id).orElseThrow(PersonNotFoundException::new);
