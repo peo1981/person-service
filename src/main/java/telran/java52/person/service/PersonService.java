@@ -16,4 +16,7 @@ public interface PersonService {
 	Iterable <CityPopulationDto> citiesPopulation();
 	PersonDto updateAddress(Integer id, AddressDto newAddress);
 	PersonDto deletePerson(Integer id);
+	PersonDto[]findAllChildren();
+	PersonDto[]findEmployeeBySalary(Integer from,Integer to);
+	
 }

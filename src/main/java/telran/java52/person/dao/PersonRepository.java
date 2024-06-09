@@ -15,15 +15,17 @@ public interface PersonRepository extends JpaRepository<Person, Integer> {
 
 	//List<Person> findByCity(String city);
 
-	
-	@Query("select p from Person p where p.address.city =?1")
 	Stream <Person>  findByAddress_City(String city);
 	
 	Stream<Person> findAllPersonsByBirthDateBetween(LocalDate from, LocalDate to);
-	@Query("select p from Person p where p.name =?1")
+	
 	Stream <Person> findByName(String name);
 	@Query("select new telran.java52.person.dto.CityPopulationDto(p.address.city, count(p)) from Person p group by p.address.city order by count(p) desc")
 	List<CityPopulationDto> getCitiesPopulation();
+	@Query("SELECT e FROM Employee e WHERE e.salary BETWEEN ?1 AND ?2")
+	Stream<Person> findBySalaryBetween(Integer from, Integer to);
+	@Query("SELECT c FROM Child c ")
+	Stream<Person> findAllChildren();
 	
 
 }

@@ -76,7 +76,15 @@ public class PersonController {
 		
 		return personService.deletePerson(id);
 	}
-	
-	
+	@GetMapping("/children")
+	public PersonDto[] findAllChildren() {
+		
+		return personService.findAllChildren();
+	};
+	@GetMapping("/salary/{from}/{to}")
+	public PersonDto[]findEmployeeBySalary(@PathVariable Integer from,@PathVariable Integer to){
+		
+		return personService.findEmployeeBySalary(from, to);
+	};
 	
 }
